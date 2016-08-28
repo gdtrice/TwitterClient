@@ -40,10 +40,29 @@ public class TwitterClient extends OAuthBaseClient {
 	//		count=25
 	//since_id=1
 	public void getHomeTimeline(AsyncHttpResponseHandler handler) {
+		executeHomeTimelineRequest(-1, -1, handler);
+	}
+
+	public void getNewerHomeTimeline(AsyncHttpResponseHandler handler, long sinceId) {
+		executeHomeTimelineRequest(sinceId, -1, handler);
+	}
+
+	public void getOlderHomeTimeline(AsyncHttpResponseHandler handler, long maxId) {
+		executeHomeTimelineRequest(-1, maxId, handler);
+	}
+
+	private void executeHomeTimelineRequest(long sinceId, long maxId, AsyncHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("statuses/home_timeline.json");
 		RequestParams params = new RequestParams();
 		params.put("count", 25);
-		params.put("since_id", 1);
+
+		if (sinceId > 0) {
+			params.put("since_id", sinceId);
+		}
+
+		if (maxId > 0) {
+			params.put("max_id", maxId);
+		}
 		// Execute request
 		getClient().get(apiUrl, params, handler);
 	}

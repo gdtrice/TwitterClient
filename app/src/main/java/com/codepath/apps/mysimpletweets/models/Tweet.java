@@ -1,5 +1,7 @@
 package com.codepath.apps.mysimpletweets.models;
 
+import com.codepath.apps.mysimpletweets.Utilities;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,6 +20,8 @@ public class Tweet {
     public String getCreatedAt() {
         return createdAt;
     }
+
+    public String getRelativeCreatedAt() {return Utilities.getRelativeTimeAgo(createdAt);}
 
     public String getBody() {
         return body;

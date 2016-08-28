@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -26,7 +25,6 @@ public class TimelineActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
-        Toast.makeText(this, "Successful Timeline Baby", Toast.LENGTH_SHORT).show();
         lvTweets = (ListView) findViewById(R.id.lvTweets);
 
         //Create array list
@@ -37,6 +35,41 @@ public class TimelineActivity extends AppCompatActivity {
         lvTweets.setAdapter(aTweets);
         //Get the client
         client = TwitterApp.getRestClient(); //singleton client
+
+        //Handlers
+        lvTweets.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public boolean onLoadMore(int page, int totalItemsCount) {
+                // Get the last tweets id to cursor the api
+                long lastTweetId = tweets.get(tweets.size() -1).getUid();
+
+                client.getOlderHomeTimeline(new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        Log.d("DEBUG SUCCESS", response.toString());
+
+                        ArrayList<Tweet> newTweets = Tweet.fromJSONArray(response);
+                        if (newTweets.size() > 0) {
+                            // using max_id is inclusive, we need to find this tweet and remove it from
+                            // the array because we already have it in our list of tweets.
+                            // It should be the first item in the list.
+                            newTweets.remove(0);
+                            aTweets.addAll(newTweets);
+                        }
+
+                        // TODO: figure out how to flag end of timeline
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        Log.d("DEBUG FAILURE", errorResponse.toString());
+                    }
+                }, lastTweetId);
+                return true;
+            }
+        });
+
+
         populateTimeline();
     }
 
@@ -47,9 +80,6 @@ public class TimelineActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 Log.d("DEBUG SUCCESS", response.toString());
-                //DESERIALIZE
-                // CREATE MODELS
-                //LOAD MODELS
                 aTweets.addAll(Tweet.fromJSONArray(response));
             }
 
