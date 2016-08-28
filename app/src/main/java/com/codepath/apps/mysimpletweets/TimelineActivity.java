@@ -1,8 +1,11 @@
 package com.codepath.apps.mysimpletweets;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.codepath.apps.mysimpletweets.models.Tweet;
@@ -21,9 +24,20 @@ public class TimelineActivity extends AppCompatActivity {
     private ListView lvTweets;
 
     private TwitterClient client;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_home_timeline, menu);
+        return true;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.drawable.ic_launcher);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+
         setContentView(R.layout.activity_timeline);
         lvTweets = (ListView) findViewById(R.id.lvTweets);
 
@@ -71,6 +85,11 @@ public class TimelineActivity extends AppCompatActivity {
 
 
         populateTimeline();
+    }
+
+    public void onComposeAction(MenuItem mi) {
+        Intent i = new Intent(this, TweetComposerActivity.class);
+        startActivity(i);
     }
 
     // Send PI request to get timeline json
