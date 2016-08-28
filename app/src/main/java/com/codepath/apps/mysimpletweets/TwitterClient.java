@@ -40,19 +40,37 @@ public class TwitterClient extends OAuthBaseClient {
 	//		count=25
 	//since_id=1
 	public void getHomeTimeline(AsyncHttpResponseHandler handler) {
-		executeHomeTimelineRequest(-1, -1, handler);
-	}
-
-	public void getNewerHomeTimeline(AsyncHttpResponseHandler handler, long sinceId) {
-		executeHomeTimelineRequest(sinceId, -1, handler);
+		executeTimelineRequest(-1, -1, null, handler, "home_timeline.json");
 	}
 
 	public void getOlderHomeTimeline(AsyncHttpResponseHandler handler, long maxId) {
-		executeHomeTimelineRequest(-1, maxId, handler);
+		executeTimelineRequest(-1, maxId, null, handler, "home_timeline.json");
 	}
 
-	private void executeHomeTimelineRequest(long sinceId, long maxId, AsyncHttpResponseHandler handler) {
-		String apiUrl = getApiUrl("statuses/home_timeline.json");
+	public void getMentionsTimeline(AsyncHttpResponseHandler handler) {
+		executeTimelineRequest(-1, -1, null, handler, "mentions_timeline.json");
+	}
+
+	public void getOlderMentionsTimeline(AsyncHttpResponseHandler handler, long maxId) {
+		executeTimelineRequest(-1, maxId, null, handler, "mentions_timeline.json");
+	}
+
+	public void getUserTimeline(AsyncHttpResponseHandler handler, String screenName) {
+		executeTimelineRequest(-1, -1, screenName, handler, "user_timeline.json");
+	}
+
+	public void getOlderUserTimeline(AsyncHttpResponseHandler handler, String screenName, long maxId) {
+		executeTimelineRequest(-1, maxId, screenName, handler, "user_timeline.json");
+	}
+
+	public void getUserInfo(AsyncHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("account/verify_credentials.json");
+		// Execute request
+		getClient().get(apiUrl, null, handler);
+	}
+
+	private void executeTimelineRequest(long sinceId, long maxId, String screenName, AsyncHttpResponseHandler handler, String resource) {
+		String apiUrl = getApiUrl(String.format("statuses/%s", resource));
 		RequestParams params = new RequestParams();
 		params.put("count", 25);
 
@@ -63,9 +81,14 @@ public class TwitterClient extends OAuthBaseClient {
 		if (maxId > 0) {
 			params.put("max_id", maxId);
 		}
+
+		if (screenName != null && !screenName.isEmpty()) {
+			params.put("screen_name", screenName);
+		}
 		// Execute request
 		getClient().get(apiUrl, params, handler);
 	}
+
 
 	//COMPOSE TWEET
 
