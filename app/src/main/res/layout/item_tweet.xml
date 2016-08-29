@@ -53,4 +53,47 @@
         android:layout_alignBottom="@+id/tvUserName"
         android:layout_toRightOf="@+id/tvUserName"
         android:layout_toEndOf="@+id/tvUserName" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvBody"
+        android:layout_alignLeft="@+id/tvBody"
+        android:layout_alignStart="@+id/tvBody">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:id="@+id/ivReplyIcon"
+            android:layout_marginRight="60dp"
+            android:src="@drawable/ic_action_reply"/>
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:id="@+id/ivRetweetIcon"
+            android:layout_marginRight="2dp"
+            android:src="@drawable/ic_action_retweet_unfilled"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvRetweetCount"
+            android:layout_marginRight="60dp"
+            tools:text="50"/>
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:id="@+id/ivFavoriteIcon"
+            android:layout_marginRight="2dp"
+            android:src="@drawable/ic_action_favorite_unfilled"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvFavoriteCount"
+            tools:text="12"/>
+    </LinearLayout>
 </RelativeLayout>

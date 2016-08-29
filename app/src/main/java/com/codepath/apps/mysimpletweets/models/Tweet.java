@@ -16,6 +16,27 @@ import java.util.ArrayList;
 public class Tweet {
     private String body;
     private long uid; // unique id for tweet
+    private User user;
+    private String createdAt;
+    private boolean isFavorited;
+    private long favoritesCount;
+    private long retweetCount;
+
+    public long getRetweetCount() {
+        return retweetCount;
+    }
+
+
+
+    public long getFavoritesCount() {
+        return favoritesCount;
+    }
+
+
+
+    public boolean isFavorited() {
+        return isFavorited;
+    }
 
     public String getCreatedAt() {
         return createdAt;
@@ -35,8 +56,6 @@ public class Tweet {
         return user;
     }
 
-    private User user;
-    private String createdAt;
 
     //Deserialize json
     public static Tweet fromJSON(JSONObject jsonObject){
@@ -45,7 +64,10 @@ public class Tweet {
             tweet.body = jsonObject.getString("text");
             tweet.uid = jsonObject.getLong("id");
             tweet.createdAt = jsonObject.getString("created_at");
+            tweet.isFavorited = jsonObject.getBoolean("favorited");
             tweet.user = User.fromJson(jsonObject.getJSONObject("user"));
+            tweet.favoritesCount = jsonObject.getLong("favorite_count");
+            tweet.retweetCount = jsonObject.getLong("retweet_count");
         } catch (JSONException e) {
             e.printStackTrace();
         }

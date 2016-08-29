@@ -59,7 +59,7 @@ public abstract class TweetsListFragment extends Fragment {
         // Construct adaptor
         aTweets = new TweetsArrayAdapter(getActivity(), tweets);
 
-        // TODO: enfore populateTimeline
+        // TODO: enforce populateTimeline
     }
 
     protected abstract void getOlderTweets(long lastTweetId);

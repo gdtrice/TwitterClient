@@ -38,13 +38,13 @@ public class User implements Serializable{
     }
 
     //list attributes
-    public String name;
-    public long uid;
-    public String screenName;
-    public String profileImageUrl;
-    public long followersCount;
-    public long followingCount;
-    public String tagLine;
+    private String name;
+    private long uid;
+    private String screenName;
+    private String profileImageUrl;
+    private long followersCount;
+    private long followingCount;
+    private String tagLine;
 
 
     //from json to user obj
